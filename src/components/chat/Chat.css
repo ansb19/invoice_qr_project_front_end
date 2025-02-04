@@ -1,0 +1,109 @@
+/* Chat container styling */
+.chat-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    height: 80vh;  /* 전체 높이의 80% 차지 */
+}
+
+/* Chat header styling */
+.chat-header {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.chat-header h2 {
+    color: #333;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+/* Chat messages container styling */
+.chat-messages {
+    flex: 1;  /* 대화창이 남은 공간을 전부 차지 */
+    overflow-y: auto;
+    margin-bottom: 20px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.chat-message {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+/* Incoming message (left-aligned) */
+.chat-message.incoming {
+    justify-content: flex-start;
+}
+
+.chat-message.incoming .chat-bubble {
+    background-color: #e9e9e9;
+    color: #333;
+    border-radius: 16px 16px 16px 0px;
+    padding: 10px;
+    max-width: 60%;
+    word-wrap: break-word;
+}
+
+/* Outgoing message (right-aligned) */
+.chat-message.outgoing {
+    justify-content: flex-end;
+}
+
+.chat-message.outgoing .chat-bubble {
+    background-color: #007bff;
+    color: white;
+    border-radius: 16px 16px 0px 16px;
+    padding: 10px;
+    max-width: 60%;
+    word-wrap: break-word;
+}
+
+/* Input container styling */
+.chat-input-container {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: white;
+    border-top: 1px solid #ccc;
+    position: sticky;
+    bottom: 0;
+}
+
+.chat-input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+    margin-right: 10px;
+}
+
+.chat-input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.chat-send-button {
+    padding: 12px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.chat-send-button:hover {
+    background-color: #0056b3;
+}

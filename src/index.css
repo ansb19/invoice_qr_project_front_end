@@ -1,0 +1,30 @@
+/* index.css */
+
+/* 전체 문서의 기본 스타일을 설정합니다 */
+body {
+    margin: 0; /* 기본 여백 제거 */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 시스템 폰트 */
+    background-color: #f0f0f0; /* 부드러운 배경색 */
+    color: #333; /* 기본 텍스트 색상 */
+  }
+  
+  /* HTML과 BODY의 높이를 100%로 설정하여 앱이 전체 화면을 채우도록 합니다 */
+  html, body {
+    height: 100%;
+  }
+  
+  /* 링크 스타일을 기본적으로 설정합니다 */
+  a {
+    color: #61dafb; /* 링크 색상 */
+    text-decoration: none; /* 밑줄 제거 */
+  }
+  
+  a:hover {
+    text-decoration: underline; /* 마우스 오버 시 밑줄 표시 */
+  }
+  
+  /* 기본적인 박스 사이징을 설정하여 패딩과 보더가 박스의 총 너비와 높이에 포함되도록 합니다 */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  

@@ -1,0 +1,49 @@
+/* App.css */
+
+/* 전체적인 스타일을 정의합니다 */
+.App {
+    text-align: center;
+  }
+  
+  /* 헤더 스타일을 정의합니다 */
+  .App-header {
+    background-color: #6378a2; /* 어두운 배경 색상 */
+    background-image: url(../src/assets/background.jpg);
+    background-size: cover; /* 배경 이미지가 화면 전체를 덮도록 설정 */
+    background-position: center; /* 배경 이미지 중앙 정렬 */
+    min-height: 100vh; /* 전체 화면 높이를 차지하도록 설정 */
+    display: flex; /* Flexbox 레이아웃을 사용 */
+    flex-direction: column; /* 세로 방향으로 정렬 */
+    align-items: center; /* 중앙 정렬 */
+    justify-content: center; /* 수직 중앙 정렬 */
+    color: rgb(162, 114, 114); /* 텍스트 색상을 흰색으로 설정 */
+  
+  }
+  
+  /* 제목 스타일을 정의합니다 */
+  .App-header h1 {
+    font-size: 4rem; /* 큰 폰트 사이즈 */
+    margin: 0; /* 기본 여백 제거 */
+    color: rgb(121, 131, 226);
+  }
+  
+  .App-header h2 {
+    color: rgb(121, 131, 226);
+  }
+
+  .welcome-link {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: color 0.5s ease; /* Smooth transition for color change */
+}
+
+.welcome-link:hover {
+    text-decoration: underline;
+    color: #a0f595; /* Change this color to whatever you'd like */
+}
+
+/* App 전체 또는 각 페이지의 상단 컴포넌트에 적용 */
+.app-container {
+  padding-top: 50px; /* 네비게이션 바의 높이만큼 여백 추가 */
+}
