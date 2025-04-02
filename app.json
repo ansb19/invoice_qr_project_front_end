@@ -36,6 +36,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "63525ce8-9cdc-4b63-a94c-e5edfce838ab"
+      }
+    },
+    "owner": "ansb"
   }
 }

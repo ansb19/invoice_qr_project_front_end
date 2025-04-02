@@ -6,7 +6,13 @@
       "@/*": [
         "./*"
       ]
-    }
+    },
+    "types": [
+      "kakao.maps.d.ts"
+    ],
+    "module": "esnext", // ✅ esnext 또는 es2020으로 변경
+    "moduleResolution": "node",
+    "target": "es2020"
   },
   "include": [
     "**/*.ts",

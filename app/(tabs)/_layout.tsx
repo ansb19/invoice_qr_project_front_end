@@ -1,45 +1,56 @@
 import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
-
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+    return (
+        <Tabs
+            screenOptions={{
+                headerStyle: {
+                    backgroundColor: '#25292e',
+                },
+                headerShadowVisible: false,
 
-  return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
-    </Tabs>
-  );
+                headerTitleAlign: 'center',
+                headerTintColor: '#ffffff',
+                tabBarStyle: {
+                    backgroundColor: '#25292e',
+                },
+                tabBarActiveTintColor: '#FF7F11',
+            }}
+        
+        >
+            <Tabs.Screen name='index'
+                options={{
+                    title: "Home",
+                    tabBarIcon: ({ color, focused }) => (
+                        <Ionicons name={focused ? 'home-sharp' : 'home-outline'} color={color} size={24} />
+                    ),
+                }}
+            />
+            <Tabs.Screen name='delivery'
+                options={{
+                    title: "Delivery",
+                    headerShown: false,
+                    tabBarIcon: ({ color, focused }) => (
+                        <MaterialCommunityIcons name={focused ? 'truck-delivery' : 'truck-delivery-outline'} color={color} size={24} />
+                    ),
+                }} />
+            <Tabs.Screen name='chatbot'
+                options={{
+                    title: "Chatbot",
+                    tabBarIcon: ({ color, focused }) => (
+                        <MaterialCommunityIcons name={focused ? 'chat-question' : 'chat-question-outline'} color={color} size={24} />
+                    ),
+                }} />
+            <Tabs.Screen name='profile'
+                options={{
+                    title: "Profile",
+                    tabBarIcon: ({ color, focused }) => (
+                        <Ionicons name={focused ? 'person' : 'person-outline'} color={color} size={24} />
+                    ),
+                }} />
+                
+        </Tabs>
+    )
 }

@@ -1,39 +1,73 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
-
+import LoadingLogin from "@/app/response_login";
+import { AuthProvider, useAuth } from "@/context/AuthContext";
+import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
+  console.log("루트 레이아웃웃")
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
+    <AuthProvider>
+
+      <App_Stack />
+      <StatusBar style='light' />
+    </AuthProvider>
+  )
+}
+
+function App_Stack() {
+  const { isLogined } = useAuth();
+
+  console.log("앱 레이아웃에서 로그인 상태: ", isLogined)
+
+  if (isLogined) {
+    return (
+      <Stack
+        screenOptions={{
+          headerStyle: { backgroundColor: "#25292e" },
+          headerTitleAlign: 'center',
+          headerTintColor: '#ffffff',
+        }}
+
+      >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
+        {/* {isLogined && <Stack.Screen name="map/[InvoiceNumber]" options={{ title: "지도데이터", headerShown: false }} />} */}
+        <Stack.Screen name="map/[InvoiceNumber]" options={{ title: "지도데이터", headerShown: false }} />
+        
       </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
-  );
+    )
+  }
+  else {
+    return (
+      <Stack
+        screenOptions={{
+          headerStyle: { backgroundColor: "#25292e" },
+          headerTitleAlign: 'center',
+          headerTintColor: '#ffffff',
+        }}
+
+      >
+        {/* {isLogined && <Stack.Screen name="map/[InvoiceNumber]" options={{ title: "지도데이터", headerShown: false }} />} */}
+        <Stack.Screen name="kakao_login" options={{ title: "카카오 로그인", headerShown: true }} />
+        <Stack.Screen name="response_login" options={{ title: "카카오 인증 로그인", headerShown: true }} />
+        <Stack.Screen name='+not-found' />
+      </Stack>
+    )
+  }
+  // return (
+  //   <Stack
+  //     screenOptions={{
+  //       headerStyle: { backgroundColor: "#25292e" },
+  //       headerTitleAlign: 'center',
+  //       headerTintColor: '#ffffff',
+  //     }}
+
+  //   >
+  //     {isLogined && <Stack.Screen name="(tabs)" options={{ headerShown: false }} />}
+  //     {/* {isLogined && <Stack.Screen name="map/[InvoiceNumber]" options={{ title: "지도데이터", headerShown: false }} />} */}
+  //     <Stack.Screen name="kakao_login" options={{ title: "카카오 로그인", headerShown: true }} />
+  //     <Stack.Screen name="response_login" options={{ title: "카카오 인증 로그인", headerShown: true }} />
+  //     <Stack.Screen name="map/[InvoiceNumber]" options={{ title: "지도데이터", headerShown: false }} />
+  //     <Stack.Screen name='+not-found' />
+  //   </Stack>
+  // )
 }
