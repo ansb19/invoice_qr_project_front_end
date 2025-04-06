@@ -10,10 +10,10 @@ export default function KakaoLoginButton({ onPress }: Props) {
     let image_source;
     let size;
     if (Platform.OS === 'web') {
-        image_source = require('@/assets/images/kakao_login_large_narrow.png');
+        image_source = require('@/assets/images/kakao_login_medium_narrow.png');
     }
     else {
-        image_source = require('@/assets/images/kakao_login_large_narrow.png');
+        image_source = require('@/assets/images/kakao_login_medium_narrow.png');
 
     }
 
@@ -29,8 +29,8 @@ export default function KakaoLoginButton({ onPress }: Props) {
 
 const styles = StyleSheet.create({
     button: {
-        width: Platform.OS === 'web' ? 600 : 366,
-        height: Platform.OS === 'web' ? 90 : 90,
+        width: 183,
+        height: 45,
         alignItems: 'center',
         justifyContent: 'center',
     },

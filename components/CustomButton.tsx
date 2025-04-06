@@ -59,8 +59,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 8,
     marginVertical: 5,
-    minWidth: 150,
-    width: Platform.OS === 'web' ? "50%" : "40%",
+    minWidth: 80,
+    maxWidth: 200, 
   },
   primary: {
     backgroundColor: "#007bff",

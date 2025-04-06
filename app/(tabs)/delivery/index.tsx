@@ -95,7 +95,8 @@ export default function DeliveryScreen() {
         <TextInput style={styles.input} value={Invoice_number} onChangeText={onChangeText} placeholder='송장 번호를 입력해주세요.' />
         <CustomButton title='조회' onPress={() => handleNavigate(Invoice_number)}></CustomButton>
         <Text style={styles.text}>입력한 값: {Invoice_number}</Text>
-
+        <Text style={styles.text}>test값: 598827298012</Text>
+        <Text style={styles.text}>test값: 500249032416</Text>
 
       </ImageBackground>
     </SafeAreaView>
@@ -122,12 +123,13 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#111',
-    fontSize: 28,
+    fontSize: 25,
     fontWeight: "bold",
-
+    width: '80%',
+    textAlign: 'center',
   },
   input: {
-    width: Platform.OS === 'web' ? "50%" : "80%",
+    width:  "80%",
     height: 40,
     borderWidth: 1,
     borderColor: "#ccc",

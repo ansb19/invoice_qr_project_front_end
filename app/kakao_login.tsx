@@ -34,9 +34,10 @@ export default function KakaoLogin() {
 
                 <Text style={styles.text}>카카오 로그인</Text>
                 <Text style={styles.textContent}>로그인 혹은 회원가입을 진행해주세요.</Text>
-                <Text style={styles.textContent}>(카카오톡 앱 권한으로 인해 테스트아이디로 로그인해주세요)</Text>
-                <Text style={styles.textContent}>TEST KAKAO ID: dksdudtjr1997@kakao.com</Text>
-                <Text style={styles.textContent}>TEST KAKAO P/W: test1997@</Text>
+                <Text style={[styles.testText,{ width: '80%'}]}>카카오톡 앱 권한으로 인해 </Text>
+                <Text style={[styles.testText,{ width: '80%'}]}>테스트 아이디로 로그인해주세요</Text>
+                <Text style={styles.testText}>ID: dksdudtjr1997@kakao.com</Text>
+                <Text style={styles.testText}>P/W: test1997@</Text>
 
                 <KakaoLoginButton onPress={handle_kakao_login} />
 
@@ -51,6 +52,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#25292e',
         alignItems: "center", // 콘텐츠 (가로세로) 중앙 정렬
+        
     },
     background: {
         flex: 1,
@@ -63,16 +65,24 @@ const styles = StyleSheet.create({
         color: "#25292e",
         fontSize: 30,
         marginTop: 100,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        marginBottom: 20,
     },
     textContent: {
         color: "#25292e",
         fontSize: 20,
-        marginTop: 10,
+        
         marginBottom: 10,
         fontWeight: "bold",
+        alignItems: 'center',
     },
-
+    testText:{
+        color: "#11292e",
+        fontSize: 15,
+        marginBottom: 10,
+        fontWeight: "bold",
+        textAlign: 'center',
+    },
     kakao_map: {
         flex: 1,
     }

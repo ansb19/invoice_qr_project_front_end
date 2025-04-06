@@ -35,7 +35,7 @@ export interface Coord {
   address: string;
 }
 
-const TRACKER_HEADERS = ["처리점소", "전화번호", "처리일자", "처리시각", "상품상태", "상세"];
+const TRACKER_HEADERS = ["처리점소", "전화번호", "처리일자", "처리시각", "상품상태", "상세정보"];
 
 const INVOICE_HEADERS: Record<string, string> = {
   wblNo: "운송장 번호",
@@ -183,7 +183,7 @@ export default function DeliveryDetail() {
               <Text key={index} style={styles.headerText}>{header}</Text>
             ))}
           </View>
-          <FlatList data={delivery_tracker} style={{ flex: 1, width: Platform.OS === 'web' ? "50%" : "90%" }}
+          <FlatList data={delivery_tracker} style={{ flex: 1, width: "90%" }}
             keyExtractor={(_, index) => index.toString()}
             scrollEnabled={false}
             renderItem={({ item }) => (
@@ -249,9 +249,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#007bff",
     paddingVertical: 10,
     borderRadius: 16,
-    justifyContent: "space-between", // ✅ 열 간격 정렬
-    width: Platform.OS === 'web' ? "50%" : "90%", // ✅ 전체 너비를 동일하게 설정
-    paddingHorizontal: 10, // ✅ 좌우 패딩 추가
+    justifyContent: "space-between", 
+    width:  "90%",
+    paddingHorizontal: 10,
   },
   headerText: {
     flex: 1,
@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   card: {
-    width: Platform.OS === 'web' ? "50%" : "90%",
+    width:  "90%",
     backgroundColor: "#fff",
     padding: 16,
     marginHorizontal: 10,  // 좌우 마진 추가
@@ -310,15 +310,15 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
     paddingVertical: 8,
-    flexWrap: "wrap",  // ✅ 줄 바꿈 적용
+    flexWrap: "wrap", 
   },
   label: {
     fontSize: 16,
     fontWeight: "600",
-    flex: 1,  // ✅ 자동 확장 (너무 길어지지 않게)
-    maxWidth: "20%", // ✅ 라벨이 너무 길어지는 것 방지
+    flex: 1,  
+    maxWidth: "20%",
     color: "#007bff",
-    flexWrap: "wrap",  // ✅ 줄 바꿈 적용
+    flexWrap: "wrap",  
     margin: 5,
   },
   value: {
@@ -329,7 +329,8 @@ const styles = StyleSheet.create({
     maxWidth: "75%", // ✅ 줄 바꿈을 위해 너비 제한
   },
   buttonContainer: {
-    width: Platform.OS === 'web' ? "25%" : "50%",
+    
+    alignItems: 'center',
   }
 });
 

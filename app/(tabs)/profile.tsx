@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#f5f5f5",
     paddingHorizontal: 20,
-    width: Platform.OS === 'web'? "50%": "100%",
+    width: "100%",
     alignSelf: "center",  // 자기 자신을 중앙 정렬
   },
   profileCard: {
@@ -92,7 +92,6 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginTop: 20,
-    width: "200%",
     alignItems: "center",
   },
 });

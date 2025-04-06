@@ -148,7 +148,7 @@ export default function KakaoMap({ delivery_coords = [], init_map_coord }: Kakao
 
 const styles = StyleSheet.create({
     map_container: {
-        width: Platform.OS === 'web' ? "50%" : "90%",
+        width: "90%",
         height: 550,
     },
     map: {

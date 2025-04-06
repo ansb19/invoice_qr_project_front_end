@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
     margin: 10,
-    width: Platform.OS === 'web' ? '30%' : '80%',
+    width: '80%',
     height: 'auto',
   },
   title: {
