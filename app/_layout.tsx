@@ -46,6 +46,7 @@ function App_Stack() {
           <Stack.Screen name="+not-found" />
         </Stack>
       )}
+      
     </GestureHandlerRootView>
   );
 

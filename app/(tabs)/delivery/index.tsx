@@ -5,7 +5,7 @@ import { makeRedirectUri } from 'expo-auth-session';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, TextInput, Button, ImageBackground, SafeAreaView, Platform } from 'react-native';
-import {  useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { InteractionManager } from 'react-native';
 
 export interface DeliveryInfo {
@@ -55,11 +55,11 @@ export default function DeliveryScreen() {
   const auto = Array.isArray(params.auto) ? params.auto[0] : params.auto;
 
   useFocusEffect(() => {
-    
+
     if (auto && auto !== prevAuto) {
       setInvoice_number(auto);
       setPrevAuto(auto);
-      console.log("Invoice_number",Invoice_number);
+      console.log("Invoice_number", Invoice_number);
       InteractionManager.runAfterInteractions(() => {
         router.push(`/(tabs)/delivery/${auto}`);
       });
@@ -91,7 +91,7 @@ export default function DeliveryScreen() {
     <SafeAreaView style={styles.container}>
       <ImageBackground source={require('@/assets/images/background.jpg')} style={styles.background}>
 
-        <Text style={styles.text}>송장 번호를 입력해주세요</Text>
+        <Text style={styles.text}>CJ 대한 통운 송장 번호를 입력해주세요</Text>
         <TextInput style={styles.input} value={Invoice_number} onChangeText={onChangeText} placeholder='송장 번호를 입력해주세요.' />
         <CustomButton title='조회' onPress={() => handleNavigate(Invoice_number)}></CustomButton>
         <Text style={styles.text}>입력한 값: {Invoice_number}</Text>

@@ -1,15 +1,19 @@
 {
   "expo": {
     "name": "invoice_qr",
-    "slug": "invoice_qr",
+    "slug": "invoice_qr_fe",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "invoice_qr",
+    "scheme": "invoiceqr",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "invoice-qr.ansb",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "permissions": [
@@ -19,7 +23,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "invoice_qr.ansb"
     },
     "web": {
       "bundler": "metro",

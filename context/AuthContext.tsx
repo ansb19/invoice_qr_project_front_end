@@ -29,7 +29,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const check_login_status = async () => {
         try {
-            const redirect_url = makeRedirectUri({ scheme: 'invoice_qr', path: "response_login" });
+            const redirect_url = makeRedirectUri({ scheme: 'invoiceqr', path: "response_login" });
             console.log("리다이렉트 앱", redirect_url)
 
 
@@ -70,7 +70,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const login = async () => {
         try {
-            const redirect_url = makeRedirectUri({ scheme: 'invoice_qr', path: "response_login" });
+            const redirect_url = makeRedirectUri({ scheme: 'invoiceqr', path: "response_login" });
             const response = await axios_instanace.post(requests_url.kakao_signup_url, { redirect_url });
 
             console.log("response", response);
@@ -103,7 +103,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const response_login = async (code: string | string[]) => {
         try {
 
-            const redirect_url = makeRedirectUri({ scheme: 'invoice_qr', path: 'response_login' });
+            const redirect_url = makeRedirectUri({ scheme: 'invoiceqr', path: 'response_login' });
             const response = await axios_instanace.get(`${requests_url.kakao_signup}/?code=${code}&redirect_url=${encodeURIComponent(redirect_url)}`);
 
             console.log("코드:", code);

@@ -24,6 +24,7 @@ export default function ProfileScreen() {
         <>
           {/* 프로필 카드 */}
           <View style={styles.profileCard}>
+          <Text style={styles.userName}>{user.id}</Text>
             <Image source={{ uri: user.profile_image }} style={styles.profileImage} />
             <Text style={styles.userName}>{user.profile_nickname}</Text>
             <Text style={styles.userEmail}>{user.account_email}</Text>

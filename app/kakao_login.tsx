@@ -34,6 +34,10 @@ export default function KakaoLogin() {
 
                 <Text style={styles.text}>카카오 로그인</Text>
                 <Text style={styles.textContent}>로그인 혹은 회원가입을 진행해주세요.</Text>
+                <Text style={styles.textContent}>(카카오톡 앱 권한으로 인해 테스트아이디로 로그인해주세요)</Text>
+                <Text style={styles.textContent}>TEST KAKAO ID: dksdudtjr1997@kakao.com</Text>
+                <Text style={styles.textContent}>TEST KAKAO P/W: test1997@</Text>
+
                 <KakaoLoginButton onPress={handle_kakao_login} />
 
             </ImageBackground>
@@ -64,8 +68,8 @@ const styles = StyleSheet.create({
     textContent: {
         color: "#25292e",
         fontSize: 20,
-        marginTop: 35,
-        marginBottom: 35,
+        marginTop: 10,
+        marginBottom: 10,
         fontWeight: "bold",
     },
 
