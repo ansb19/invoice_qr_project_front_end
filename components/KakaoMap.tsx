@@ -78,21 +78,9 @@ export default function KakaoMap({ delivery_coords = [], init_map_coord }: Kakao
     }
 
     useEffect(() => {
-        if (Platform.OS === 'web') {
-            getLocation();
-        }
-        else { //앱 환경이라면면
-            const data = {
-                delivery_coords, init_map_coord
-            }
+        getLocation();
 
-            const script = `
-        window.postMessage(${JSON.stringify(data)}, "*");
-        true;
-      `;
-            if (webviewRef.current)
-                webviewRef.current.injectJavaScript(script);
-        }
+
     }, []);
 
     return (
@@ -106,19 +94,20 @@ export default function KakaoMap({ delivery_coords = [], init_map_coord }: Kakao
                             <Map id="map" center={{ lat: init_map_coord!.latitude, lng: init_map_coord!.longitude }} style={styles.map} level={13}>
 
                                 {delivery_coords.map((coord, index) => {
-                                    
+
                                     let label = `배송 ${index + 1}`;
 
-                                    if(index === 0)
+                                    if (index === 0)
                                         label = "출발지";
-                                    else if(index === delivery_coords.length -1)
+                                    else if (index === delivery_coords.length - 1)
                                         label = "도착지";
 
-                                    return (<MapMarker key={index} position={{ lat: coord.latitude, lng: coord.longitude }}>
-                                        <View style={styles.markerTextContainer}>
-                                            <Text style={styles.markerText}>{label}</Text>
-                                        </View>
-                                    </MapMarker>)
+                                    return (
+                                        <MapMarker key={index} position={{ lat: coord.latitude, lng: coord.longitude }}>
+                                            <View style={styles.markerTextContainer}>
+                                                <Text style={styles.markerText}>{label}</Text>
+                                            </View>
+                                        </MapMarker>)
                                 })}
 
                             </Map>
@@ -128,11 +117,25 @@ export default function KakaoMap({ delivery_coords = [], init_map_coord }: Kakao
                                 source={{ uri: `https://qdvyuoo-ansb-8081.exp.direct/map/${InvoiceNumber}` }}
                                 style={styles.map}
                                 ref={webviewRef}
-                                onMessage={(event: WebViewMessageEvent) => {
-                                    console.log("웹에서 보낸 데이터:", JSON.parse(event.nativeEvent.data));
+
+                                onLoadEnd={() => {
+                                    const data = {
+                                        delivery_coords,
+                                        init_map_coord
+                                    }
+                                    const script = `
+                                    window.dispatchEvent(new MessageEvent('message', {
+                                      data: '${JSON.stringify(data)}'
+                                    }));
+                                    true;
+                                  `;
+
+                                    webviewRef.current?.injectJavaScript(script);
+
                                 }}
                                 geolocationEnabled={true}
-
+                                scrollEnabled={false}
+                                nestedScrollEnabled={true}
                             />
                         )
                     )
@@ -145,7 +148,7 @@ export default function KakaoMap({ delivery_coords = [], init_map_coord }: Kakao
 
 const styles = StyleSheet.create({
     map_container: {
-        width: "50%",
+        width: Platform.OS === 'web' ? "50%" : "90%",
         height: 550,
     },
     map: {

@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginVertical: 5,
     minWidth: 150,
-    width: Platform.OS === 'web' ? "50%" : "100%",
+    width: Platform.OS === 'web' ? "50%" : "40%",
   },
   primary: {
     backgroundColor: "#007bff",

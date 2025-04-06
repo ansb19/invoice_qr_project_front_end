@@ -5,6 +5,7 @@ import { useKakaoLoader as useKakaoLoaderOrigin, Map, MapMarker } from "react-ka
 import { useEffect, useState } from "react";
 import * as Location from "expo-location";
 import { Coord } from "@/app/(tabs)/delivery/[InvoiceNumber]";
+import { Stack } from "expo-router";
 
 
 // * 웹으로 전체 화면 보여주는곳
@@ -18,96 +19,71 @@ export default function KakaoMap_Web() {
         : process.env.EXPO_PUBLIC_KAKAO_MAP_TEST_API_KEY as string
 
 
-    //웹
-    if (Platform.OS === 'web') {
-        useKakaoLoaderOrigin({
-            appkey: api_key,
-            libraries: ["clusterer", "drawing", "services"],
-        })
-    }
 
-    // const getLocation = async () => {
-    //     try {
-    //         setLoading(true);
+    useKakaoLoaderOrigin({
+        appkey: api_key,
+        libraries: ["clusterer", "drawing", "services"],
+    })
 
-    //         if (Platform.OS === 'web') {
-    //             navigator.geolocation.getCurrentPosition(
-    //                 (position) => {
-    //                     setLocation({
-    //                         coords: {
-    //                             latitude: position.coords.latitude, //  position.coords.latitude
-    //                             longitude: position.coords.longitude, //  position.coords.longitude
-    //                             altitude: position.coords.altitude,
-    //                             accuracy: position.coords.accuracy,
-    //                             altitudeAccuracy: position.coords.altitudeAccuracy,
-    //                             heading: position.coords.heading,
-    //                             speed: position.coords.speed,
-    //                         },
-    //                         timestamp: position.timestamp,
-    //                     });
-    //                     setLoading(false);
-    //                 },
-    //                 (error) => {
-    //                     alert("위치 가져오기 실패");
-    //                     setLoading(false);
-    //                 }
-    //             )
-    //         }
-    //         else {
-    //             const { status } = await Location.requestForegroundPermissionsAsync(); //사용자가 이용중에만 권한 요청 background는 백그라운드에서도 요청
-    //             if (status !== "granted") {
-    //                 Alert.alert("권한 필요, 위치 권한을 허용해주세요");
-    //                 setLoading(false);
-    //                 return;
-    //             }
-    //             const current_location = await Location.getCurrentPositionAsync();
-    //             setLocation(current_location);
-    //         }
-    //     } catch (error) {
-    //         console.error("위치 가져오기 실패", error);
-    //         alert("위치를 가져올 수 없습니다");
-    //     }
-    //     finally {
-    //         setLoading(false);
-    //     }
-    // }
 
 
 
     useEffect(() => {
-        const handleMessage = (event: any) => {
+        const handleMessage = (event: MessageEvent) => {
             try {
-                const data = event.data;
-                console.log("앱에서 보낸 데이터:", data);
-                setDeliveryCoords(data.deliveryCoords);
-                setInitMapCoord(data.init_map_coord);
+                const { delivery_coords, init_map_coord } = JSON.parse(event.data);
+                console.log("앱에서 보낸 데이터:", event.data + delivery_coords);
+                if (delivery_coords.length > 0) {
+                    setDeliveryCoords(delivery_coords);
+                }
+
+                if (init_map_coord) {
+                    setInitMapCoord(init_map_coord);
+                }
             } catch (error) {
                 console.error("데이터 파싱 오류:", error);
             }
         };
-        const receiver = Platform.OS === 'web' ? document : window;
+        //const receiver = Platform.OS === 'web' ? document : window;
 
-        receiver.addEventListener("message", handleMessage);
+        document.addEventListener("message", handleMessage as EventListener);
+        window.addEventListener("message", handleMessage);
 
         return () => {
-            receiver.removeEventListener("message", handleMessage);
+            document.removeEventListener("message", handleMessage as EventListener);
+            window.removeEventListener("message", handleMessage);
         };
     }, []);
 
     return (
-        
-        <ScrollView style={styles.map_container} scrollEnabled={true}>
-            {/* // <Map id="map" center={{ lat: init_map_coord!.latitude, lng: init_map_coord!.longitude }} style={styles.map} level={13}> */}
-            <Map id="map" center={{ lat: initMapCoord!.latitude, lng: initMapCoord!.longitude }} style={styles.map} level={12}>
-                {deliveryCoords.map((coord, index) => (
-                    (<MapMarker key={index} position={{ lat: coord.latitude, lng: coord.longitude }}>
-                        <View style={styles.markerTextContainer}>
-                            <Text style={styles.markerText}>배송 {index + 1}</Text>
-                        </View>
-                    </MapMarker>)
-                ))}
-            </Map>
-        </ScrollView>
+        <>
+            <Stack.Screen options={{ headerShown: false }} />
+            <View style={styles.map_container} >
+                {/* // <Map id="map" center={{ lat: init_map_coord!.latitude, lng: init_map_coord!.longitude }} style={styles.map} level={13}> */}
+                {initMapCoord ? (
+                    <Map id="map" center={{ lat: initMapCoord!.latitude, lng: initMapCoord!.longitude }} style={styles.map} level={13}>
+
+                        {deliveryCoords.map((coord, index) => {
+
+                            let label = `배송 ${index + 1}`;
+
+                            if (index === 0)
+                                label = "출발지";
+                            else if (index === deliveryCoords.length - 1)
+
+                                label = "도착지";
+                            return (<MapMarker key={index} position={{ lat: coord.latitude, lng: coord.longitude }}>
+                                <View style={styles.markerTextContainer}>
+                                    <Text style={styles.markerText}>배송 {index + 1}</Text>
+                                </View>
+                            </MapMarker>)
+                        })}
+                    </Map>
+                )
+                    : (<Text>지도 로딩 중...</Text>)
+                }
+            </View>
+        </>
     )
 
 }

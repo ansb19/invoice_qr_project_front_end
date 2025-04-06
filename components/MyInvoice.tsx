@@ -2,15 +2,18 @@ import { axios_instanace, requests_url } from "@/api/axios";
 import { useAuth } from "@/context/AuthContext";
 import { router, useFocusEffect } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Platform } from "react-native";
+import { useNavigation } from '@react-navigation/native';
+import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
+
 
 export default function MyInvoice() {
   const [recentInvoices, setRecentInvoices] = useState<string[]>([]);
-  const isFirstRun = useRef(true);
   const { isLogined } = useAuth();
+  const navigation = useNavigation();
 
   const handleNavigate = (invoice_number: string) => {
-    router.navigate(`/delivery/${invoice_number}`);
+    router.navigate(`/(tabs)/delivery/?auto=${invoice_number}`);
   }
 
   const loadRecentInvoices = useCallback(async () => {
@@ -24,9 +27,6 @@ export default function MyInvoice() {
           const my_invoices: string[] = response.data.data;
           console.log(recentInvoices);
           setRecentInvoices(my_invoices);
-          setTimeout(() => {
-            alert("송장 조회 성공 세션 있음");
-          }, 0);
         }
         else if (response.status === 401 && response.data.message) {
           console.log(response.data.message);
@@ -38,7 +38,7 @@ export default function MyInvoice() {
           // }, 0);
         }
       }
-      else{
+      else {
         alert("로그인이 되어있지 않습니다 로그인을 해주세요");
         setTimeout(() => {
           router.replace('/kakao_login');
@@ -52,27 +52,43 @@ export default function MyInvoice() {
   useFocusEffect(
     useCallback(() => {
       loadRecentInvoices();
+
     }, [])
   );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>📋 최근 조회한 송장</Text>
+    
+      <View style={styles.container}>
+        <Text style={styles.title}>📋 최근 조회한 송장 📋</Text>
 
-      <FlatList
+        {/* <FlatList
         data={recentInvoices}
+        scrollEnabled={false}
+        nestedScrollEnabled={false}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity style={styles.invoiceItem} onPress={() => handleNavigate(item)}>
             <Text style={styles.invoiceText}>{item}</Text>
           </TouchableOpacity>
         )}
-      />
-    </View>
+      /> */}
+      
+        <ScrollView style={styles.scrollContainer} >
+          {
+            recentInvoices.map((item, index) => (
+              <TouchableOpacity key={index} style={styles.invoiceItem} onPress={() => handleNavigate(item)}>
+                <Text style={styles.invoiceText}>{item}</Text>
+              </TouchableOpacity>
+            ))
+          }
+        </ScrollView>
+      </View>
+    
   );
 };
 
 const styles = StyleSheet.create({
+
   container: {
     backgroundColor: "#fff",
     padding: 16,
@@ -83,13 +99,14 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
     margin: 10,
-    width: 'auto',
+    width: Platform.OS === 'web' ? '30%' : '80%',
     height: 'auto',
   },
   title: {
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 10,
+    alignSelf: "center"
   },
   invoiceItem: {
     backgroundColor: "#f5f5f5",
@@ -103,6 +120,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#333",
   },
+  scrollContainer: {
+    maxHeight: 250, // 리스트가 너무 길면 여기서 스크롤됨
+  },
+ 
 });
 
 

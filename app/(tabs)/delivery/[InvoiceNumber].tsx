@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from "expo-router";
+import { useGlobalSearchParams } from "expo-router";
 import { axios_instanace, requests_url } from '@/api/axios';
 import CustomButton from '@/components/CustomButton';
 import KakaoMap from '@/components/KakaoMap';
@@ -6,36 +6,27 @@ import { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Button, ImageBackground, SafeAreaView, FlatList, Platform, Linking, ScrollView } from 'react-native';
 import { getLinkingURL } from "expo-linking";
 import * as WebBrowser from 'expo-web-browser';
+import { makeRedirectUri } from "expo-auth-session";
 
 export interface DeliveryInfo {
-  crgStDcd: string;
-  empno: string;
-  patnBranCd: string;
-  branCd: string;
-  rcvrClphno: string; //수화인 휴대폰번호
-  wblNo: string; //송장 번호
-  workHms: string; //처리 시각
-  acprRlpDcd: string;
-  repGoodsNm: string; //품목
-  workDt: string; //처리일자
-  procBranTelNo: string; // 처리점소 전화 번호
-  sndrAddr: string; // 송화인 주소
-  patnBranTelNo: string;
-  rcvrAddr: string; // 수화인 주소
-  acprNm: string; //인수자명 ??
-  crgStDnm: string; //상품 상태
-  sndrNm: string; //송화인 이름
-  branNm: string; //처리점소
-  sndrClphno: string; //송화인 휴대폰번호
-  qty: string; // 수량
-  crgStDcdVal: string; //상세
-  goodsDtlNm: string;
-  acprRlpDnm: string; //기타
-  rcvrNm: string; //수화인인
-  patnBranNm: string; // 상대점소
-  empynm: string;
-  latitude?: string;
-  longitude?: string;
+  wblNo: string,
+  sndrNm: string,
+  sndrClphno: string,
+  sndrAddr: string,
+  rcvrNm: string,
+  rcvrClphno: string,
+  rcvrAddr: string,
+  repGoodsNm: string,
+  qty: string,
+}
+
+export interface DeliveryTrack {
+  branNm: string,
+  procBranTelNo: string,
+  workDt: string,
+  workHms: string,
+  crgStDnm: string,
+  crgStDcdVal: string,
 }
 
 export interface Coord {
@@ -60,18 +51,18 @@ const INVOICE_HEADERS: Record<string, string> = {
 
 
 export default function DeliveryDetail() {
-  const { InvoiceNumber } = useLocalSearchParams(); // URL 파라미터 가져오기
+  const { InvoiceNumber } = useGlobalSearchParams(); // URL 파라미터 가져오기
 
   const [delivery_info, setDelivery_info] = useState<DeliveryInfo | undefined>(undefined);
-  const [delivery_tracker, setDelivery_tracker] = useState<DeliveryInfo[] | undefined>(undefined);
+  const [delivery_tracker, setDelivery_tracker] = useState<DeliveryTrack[] | undefined>(undefined);
   const [delivery_coords, setDelivery_coords] = useState<Coord[] | null>(null);
   const [map_location, setMap_location] = useState<Coord | null>(null);
   const [isFetched, setIsFetched] = useState(false);
 
   useEffect(() => {
-    if (InvoiceNumber && !isFetched) {
+    if (InvoiceNumber) { // && !isFetched
       onSearch_invoice();
-      setIsFetched(true);
+      //setIsFetched(true);
     }
   }, [InvoiceNumber]);
 
@@ -98,7 +89,7 @@ export default function DeliveryDetail() {
       if (response.status === 200) {
         await axios_instanace.post(requests_url.find_my_invoice, { invoice_number: InvoiceNumber });
       }
-      const delivery_tracker: DeliveryInfo[] = response2.data.data;
+      const delivery_tracker: DeliveryTrack[] = response2.data.data;
       setDelivery_tracker(delivery_tracker);
 
       const delivery_coord = response3.data.data;
@@ -124,10 +115,20 @@ export default function DeliveryDetail() {
   const onChangeQR = async () => {
     let current_url;
 
-    if (Platform.OS === 'web')
+    if (Platform.OS === 'web') {
       current_url = window.location.href;
-    else
-      current_url = getLinkingURL();
+
+      console.log("current",current_url);
+    }
+    else {
+      
+      console.log("current_url2");
+      
+      current_url = makeRedirectUri( { scheme: 'invoice_qr', path: `delivery/${InvoiceNumber}`});
+      console.log(current_url);
+    }
+
+
     try {
       console.log("현재 url:", current_url);
       const response = await axios_instanace.get(
@@ -182,8 +183,9 @@ export default function DeliveryDetail() {
               <Text key={index} style={styles.headerText}>{header}</Text>
             ))}
           </View>
-          <FlatList data={delivery_tracker} style={{ flex: 1, width: Platform.OS === 'web' ? "50%" : "100%" }}
+          <FlatList data={delivery_tracker} style={{ flex: 1, width: Platform.OS === 'web' ? "50%" : "90%" }}
             keyExtractor={(_, index) => index.toString()}
+            scrollEnabled={false}
             renderItem={({ item }) => (
               <View style={styles.row}>
                 <Text style={styles.cell}>{item.branNm}</Text>
@@ -196,8 +198,8 @@ export default function DeliveryDetail() {
             )}
           />
 
-          {Platform.OS === 'web' && delivery_coords && <KakaoMap delivery_coords={delivery_coords} init_map_coord={map_location} />}
-          {Platform.OS !== 'web' && delivery_coords && <KakaoMap delivery_coords={delivery_coords} init_map_coord={map_location} />}
+          {delivery_coords && <KakaoMap delivery_coords={delivery_coords} init_map_coord={map_location} />}
+
 
           <View style={styles.buttonContainer}>
             <CustomButton title='QR 코드로 생성' onPress={() => onChangeQR()}></CustomButton>
@@ -248,7 +250,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 16,
     justifyContent: "space-between", // ✅ 열 간격 정렬
-    width: Platform.OS === 'web' ? "50%" : "100%", // ✅ 전체 너비를 동일하게 설정
+    width: Platform.OS === 'web' ? "50%" : "90%", // ✅ 전체 너비를 동일하게 설정
     paddingHorizontal: 10, // ✅ 좌우 패딩 추가
   },
   headerText: {
@@ -291,7 +293,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   card: {
-    width: Platform.OS === 'web' ? "50%" : "100%",
+    width: Platform.OS === 'web' ? "50%" : "90%",
     backgroundColor: "#fff",
     padding: 16,
     marginHorizontal: 10,  // 좌우 마진 추가

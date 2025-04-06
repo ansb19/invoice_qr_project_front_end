@@ -1,9 +1,12 @@
 import { axios_instanace, requests_url } from '@/api/axios';
 import CustomButton from '@/components/CustomButton';
 import KakaoMap from '@/components/KakaoMap';
-import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { makeRedirectUri } from 'expo-auth-session';
+import { useFocusEffect, useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, TextInput, Button, ImageBackground, SafeAreaView, Platform } from 'react-native';
+import {  useLocalSearchParams } from "expo-router";
+import { InteractionManager } from 'react-native';
 
 export interface DeliveryInfo {
   crgStDcd: string;
@@ -42,28 +45,58 @@ export interface Coords {
 }
 
 export default function DeliveryScreen() {
-  const router = useRouter();
 
+  const router = useRouter();
+  const params = useLocalSearchParams();
   const [Invoice_number, setInvoice_number] = useState<string>('');
+  const [prevAuto, setPrevAuto] = useState<string | null>(null); // ✅ 이전 auto 값 기억
+
+
+  const auto = Array.isArray(params.auto) ? params.auto[0] : params.auto;
+
+  useFocusEffect(() => {
+    
+    if (auto && auto !== prevAuto) {
+      setInvoice_number(auto);
+      setPrevAuto(auto);
+      console.log("Invoice_number",Invoice_number);
+      InteractionManager.runAfterInteractions(() => {
+        router.push(`/(tabs)/delivery/${auto}`);
+      });
+    }
+    // else if (auto && hasAutoPushed) {
+    //   console.log("hasAutoPushed2", hasAutoPushed);
+    //   setHasAutoPushed(false);
+    //   setInvoice_number('');
+
+    //   InteractionManager.runAfterInteractions(() => {
+    //     router.replace(`/(tabs)/delivery`);
+    //   });
+
+
+    // }
+
+  });
 
   const onChangeText = (input_text: string) => {
     setInvoice_number(input_text);
   }
 
+
   const handleNavigate = (InvoiceNumber: string) => {
-    router.navigate(`./${InvoiceNumber}`,{ relativeToDirectory: true}); // ✅ 동적 URL 이동
+    router.navigate(`./${InvoiceNumber}`, { relativeToDirectory: true }); // ✅ 동적 URL 이동
   };
-  
+
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground source={require('@/assets/images/background.jpg')} style={styles.background}>
-       
-          <Text style={styles.text}>송장 번호를 입력해주세요</Text>
-          <TextInput style={styles.input} value={Invoice_number} onChangeText={onChangeText} placeholder='송장 번호를 입력해주세요.' />
-          <CustomButton title='조회' onPress={() => handleNavigate(Invoice_number)}></CustomButton>
-          <Text style={styles.text}>입력한 값: {Invoice_number}</Text>
 
-      
+        <Text style={styles.text}>송장 번호를 입력해주세요</Text>
+        <TextInput style={styles.input} value={Invoice_number} onChangeText={onChangeText} placeholder='송장 번호를 입력해주세요.' />
+        <CustomButton title='조회' onPress={() => handleNavigate(Invoice_number)}></CustomButton>
+        <Text style={styles.text}>입력한 값: {Invoice_number}</Text>
+
+
       </ImageBackground>
     </SafeAreaView>
   )
@@ -73,7 +106,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#25292e',
-    
+
   },
   scorll_options: {
     justifyContent: 'center',
@@ -94,7 +127,7 @@ const styles = StyleSheet.create({
 
   },
   input: {
-    width: Platform.OS === 'web' ? "50%" : "100%",
+    width: Platform.OS === 'web' ? "50%" : "80%",
     height: 40,
     borderWidth: 1,
     borderColor: "#ccc",

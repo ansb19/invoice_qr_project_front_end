@@ -3,7 +3,7 @@ import KakaoLoginButton from "@/components/KakaoLoginButton";
 import MyInvoice from "@/components/MyInvoice";
 import { useAuth } from "@/context/AuthContext";
 import { ImageBackground } from "expo-image";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, ScrollView } from "react-native";
 
 export default function Index() {
 
@@ -20,7 +20,9 @@ export default function Index() {
                     <Text style={styles.textContent}>QR 송장에 오신 걸 환영 합니다.</Text>
 
 
+                    
                     <MyInvoice />
+                    
                 </ImageBackground>
             </View >
        
